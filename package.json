@@ -1,0 +1,18 @@
+{
+  "name": "event-as-a-property",
+  "version": "1.0.0",
+  "description": "a strongly typed typed event-as-a-property wrapper for Node's EventEmitter",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "https://github.com/iliazeus/event-as-a-property.git",
+  "author": "Ilia Pozdnyakov <ilia.pozdnyakov@ya.ru>",
+  "license": "MIT",
+  "scripts": {
+    "prepublish": "tsc",
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.53",
+    "typescript": "^3.9.7"
+  }
+}
