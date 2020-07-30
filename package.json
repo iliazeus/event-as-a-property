@@ -1,7 +1,18 @@
 {
   "name": "event-as-a-property",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a strongly typed typed event-as-a-property wrapper for Node's EventEmitter",
+  "keywords": [
+    "event",
+    "events",
+    "event-emitter",
+    "event-property",
+    "nodejs",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/iliazeus/event-as-a-property.git",
