@@ -1,7 +1,7 @@
 import assert from "assert";
 import type { EventEmitter } from "events";
 
-export default class Event<TListener extends (...args: any[]) => void> {
+class Event<TListener extends (...args: any[]) => void> {
   private readonly _emitter: EventEmitter;
   public readonly name: string | symbol;
 
@@ -53,3 +53,6 @@ export default class Event<TListener extends (...args: any[]) => void> {
     );
   }
 }
+
+(Event as any).default = Event;
+export = Event;
