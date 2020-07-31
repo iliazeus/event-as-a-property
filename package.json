@@ -13,17 +13,24 @@
   "engines": {
     "node": ">=12.0.0"
   },
+  "files": [
+    "lib"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/iliazeus/event-as-a-property.git",
   "author": "Ilia Pozdnyakov <ilia.pozdnyakov@ya.ru>",
   "license": "MIT",
   "scripts": {
-    "prepublish": "tsc",
-    "compile": "tsc"
+    "compile": "tsc",
+    "test": "mocha -r ts-node/register test/**.ts",
+    "prepublish": "tsc && mocha -r ts-node/register test/**.ts"
   },
   "devDependencies": {
+    "@types/mocha": "^8.0.0",
     "@types/node": "^12.12.53",
+    "mocha": "^8.1.0",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
   }
 }
