@@ -1,7 +1,7 @@
 import assert from "assert";
 import type { EventEmitter } from "events";
 
-class Event<TListener extends (...args: any[]) => void> {
+class  Event<TArgs extends any[] = []> {
   private readonly _emitter: EventEmitter;
   public readonly name: string | symbol;
 
@@ -10,28 +10,28 @@ class Event<TListener extends (...args: any[]) => void> {
     this.name = name;
   }
 
-  public emit(emitter: EventEmitter, ...args: Parameters<TListener>): void {
+  public emit(emitter: EventEmitter, ...args: TArgs): void {
     assert(emitter === this._emitter, "wrong EventEmitter");
     emitter.emit(this.name, ...args);
   }
 
-  public addListener(listener: TListener): void {
+  public addListener(listener: (...args: TArgs) => void): void {
     this._emitter.addListener(this.name, listener);
   }
 
-  public on(listener: TListener): void {
+  public on(listener: (...args: TArgs) => void): void {
     this._emitter.on(this.name, listener);
   }
 
-  public once(listener: TListener): void {
+  public once(listener: (...args: TArgs) => void): void {
     this._emitter.once(this.name, listener);
   }
 
-  public removeListener(listener: TListener): void {
+  public removeListener(listener: (...args: TArgs) => void): void {
     this._emitter.removeListener(this.name, listener);
   }
 
-  public off(listener: TListener): void {
+  public off(listener: (...args: TArgs) => void): void {
     this._emitter.off(this.name, listener);
   }
 
@@ -39,15 +39,15 @@ class Event<TListener extends (...args: any[]) => void> {
     this._emitter.removeAllListeners(this.name);
   }
 
-  public prependListener(listener: TListener): void {
+  public prependListener(listener: (...args: TArgs) => void): void {
     this._emitter.prependListener(this.name, listener);
   }
 
-  public prependOnceListener(listener: TListener): void {
+  public prependOnceListener(listener: (...args: TArgs) => void): void {
     this._emitter.prependOnceListener(this.name, listener);
   }
 
-  public promise(): Promise<Parameters<TListener>> {
+  public promise(): Promise<TArgs> {
     return new Promise((resolve) =>
       this._emitter.once(this.name, (...args) => resolve(args as any))
     );

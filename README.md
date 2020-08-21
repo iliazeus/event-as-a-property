@@ -6,28 +6,28 @@ All methods delegate to the `EventEmitter` passed in the constructor.
 Their semantics are identical, except the event name is implicit, and the return type is `void`.
 
 ```ts
-export default class Event<TListener extends (...args: any[]) => void> {
+export default class Event<TArgs extends any[] = []> {
   readonly name: string | symbol;
 
   constructor(emitter: EventEmitter, name?: string | symbol = Symbol()) {}
 
   /** has to be the same `EventEmitter` from which it was constructed */
-  emit(emitter: EventEmitter, ...args: Parameters<TListener>): void;
+  emit(emitter: EventEmitter, ...args: TArgs): void;
 
-  addListener(listener: TListener): void;
-  on(listener: TListener): void;
+  addListener(listener: (...args: TArgs) => void): void;
+  on(listener: (...args: TArgs) => void): void;
 
-  once(listener: TListener): void;
+  once(listener: (...args: TArgs) => void): void;
 
-  removeListener(listener: TListener): void;
-  off(listener: TListener): void;
+  removeListener(listener: (...args: TArgs) => void): void;
+  off(listener: (...args: TArgs) => void): void;
 
   removeAllListeners(): void;
 
-  prependListener(listener: TListener): void;
-  prependOnceListener(listener: TListener): void;
+  prependListener(listener: (...args: TArgs) => void): void;
+  prependOnceListener(listener: (...args: TArgs) => void): void;
 
-  promise(): Promise<Parameters<TListener>>;
+  promise(): Promise<TArgs>;
 }
 ```
 
@@ -42,7 +42,7 @@ class Publisher {
   private _emitter = new EventEmitter();
 
   /** declare the event as a property on the event source */
-  onPublish = new Event<(date: Date, text: string) => void>(this.emitter);
+  onPublish = new Event<[date: Date, text: string]>(this.emitter);
 
   publish(date: Date, text: string): void {
     /** emit the event using the `EventEmitter` */
@@ -86,10 +86,10 @@ interface Bad extends EventEmitter {
 }
 
 /**
- * `Good` has an `exit` event with a `status` parameter.
+ * `Good` has an `exit` event with a `status` parameter that is a `number`.
  */
 interface Good {
-  readonly exit: Event<(status: number) => void>;
+  readonly exit: Event<[status: number]>;
 }
 ```
 
@@ -151,7 +151,7 @@ interface Good {
   /**
    * Event docs are inseparable from the event property.
    */
-  readonly exit: Event<(status: number) => void>;
+  readonly exit: Event<[status: number]>;
 }
 ```
 
@@ -171,8 +171,8 @@ class Bad extends EventEmitter {
  * Then, deprecate the methods inherited from `EventEmitter`
  */
 class Better extends EventEmitter {
-  readonly start = new Event<() => void>(this, "start");
-  readonly exit = new Event<(status: number) => void>(this, "exit");
+  readonly start = new Event<[]>(this, "start");
+  readonly exit = new Event<[status: number]>(this, "exit");
 }
 
 /**
@@ -181,7 +181,7 @@ class Better extends EventEmitter {
 class Best {
   private readonly _emitter = new EventEmitter();
 
-  readonly start = new Event<() => void>(this._emitter);
-  readonly exit = new Event<(status: number) => void>(this._emitter);
+  readonly start = new Event<[]>(this._emitter);
+  readonly exit = new Event<[status: number]>(this._emitter);
 }
 ```

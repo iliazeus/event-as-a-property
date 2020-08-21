@@ -5,7 +5,7 @@ import Event from "../src";
 describe("class Event", () => {
   it("subscribes to events", () => {
     const emitter = new EventEmitter();
-    const event = new Event<(data: string) => void>(emitter);
+    const event = new Event<[data: string]>(emitter);
 
     event.addListener((data) => assert(data === "foobar"));
     event.emit(emitter, "foobar");
@@ -13,7 +13,7 @@ describe("class Event", () => {
 
   it("unsubscribes from events", () => {
     const emitter = new EventEmitter();
-    const event = new Event<() => void>(emitter);
+    const event = new Event<[]>(emitter);
     const listener = () => assert.fail();
 
     event.addListener(listener);
@@ -23,7 +23,7 @@ describe("class Event", () => {
 
   it("subscribes to event once", () => {
     const emitter = new EventEmitter();
-    const event = new Event<(data: string) => void>(emitter);
+    const event = new Event<[data: string]>(emitter);
 
     event.once((data) => assert(data === "foobar"));
     event.emit(emitter, "foobar");
@@ -32,7 +32,7 @@ describe("class Event", () => {
 
   it("awaits an event", (done) => {
     const emitter = new EventEmitter();
-    const event = new Event<(data: string) => void>(emitter);
+    const event = new Event<[data: string]>(emitter);
 
     event.promise().then(([data]) => assert(data === "foobar")).then(done);
     event.emit(emitter, "foobar");
@@ -41,7 +41,7 @@ describe("class Event", () => {
 
   it("interoperates with EventEmitter", () => {
     const emitter = new EventEmitter();
-    const event = new Event<(data: string) => void>(emitter, "event");
+    const event = new Event<[data: string]>(emitter, "event");
 
     event.addListener((data) => assert(data === "foobar"));
     emitter.emit("event", "foobar");
@@ -49,7 +49,7 @@ describe("class Event", () => {
 
   it("rejects wrong EventEmitters", () => {
     const emitter = new EventEmitter();
-    const event = new Event<() => void>(emitter);
+    const event = new Event<[]>(emitter);
 
     assert.throws(() => event.emit(new EventEmitter()));
   });
